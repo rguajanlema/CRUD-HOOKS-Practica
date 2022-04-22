@@ -6,17 +6,20 @@ function App() {
   const [tareas, setTareas] = useState([]);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [id, setId] = useState("");
+  const [error, setError] = useState(null);
 
   const agregarTarea = (e) => {
     e.preventDefault();
     if (!tarea.trim()) {
       console.log("Elemento basio");
+      setError("Write something please..");
       return;
     }
     console.log(tarea);
 
     setTareas([...tareas, { id: shortid.generate(), nombreTarea: tarea }]);
     setTarea("");
+    setError(null);
   };
 
   const deleteTask = (id) => {
@@ -35,6 +38,7 @@ function App() {
     e.preventDefault();
     if (!tarea.trim()) {
       console.log("Elemento Vacio");
+      setError("Write something please..");
       return;
     }
 
@@ -46,6 +50,7 @@ function App() {
     setModoEdicion(false);
     setTarea("");
     setId("");
+    setError(null);
   };
 
   return (
@@ -56,24 +61,29 @@ function App() {
       <div className="row">
         <div className="col-8">
           <h4 className="text-center">List Task</h4>
+
           <ul className="list-group">
-            {tareas.map((item) => (
-              <li className="list-group-item" key={item.id}>
-                <span className="lead">{item.nombreTarea}</span>
-                <button
-                  className="btn btn-danger btn-sm float-right mx-2"
-                  onClick={() => deleteTask(item.id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="btn btn-warning btn-sm float-right"
-                  onClick={() => editar(item)}
-                >
-                  Edit
-                </button>
-              </li>
-            ))}
+            {tareas.length === 0 ? (
+              <li className="list-group-item">No there is Tasks</li>
+            ) : (
+              tareas.map((item) => (
+                <li className="list-group-item" key={item.id}>
+                  <span className="lead">{item.nombreTarea}</span>
+                  <button
+                    className="btn btn-danger btn-sm float-right mx-2"
+                    onClick={() => deleteTask(item.id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-warning btn-sm float-right"
+                    onClick={() => editar(item)}
+                  >
+                    Edit
+                  </button>
+                </li>
+              ))
+            )}
           </ul>
         </div>
         <div className="col-4">
@@ -81,6 +91,8 @@ function App() {
             {modoEdicion ? "Edit task" : "Add Task"}
           </h4>
           <form onSubmit={modoEdicion ? editTask : agregarTarea}>
+            {error ? <span className="text-danger">{error}</span> : null}
+
             <input
               type="text"
               className="form-control mb-2"
