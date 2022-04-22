@@ -5,6 +5,7 @@ function App() {
   const [tarea, setTarea] = useState("");
   const [tareas, setTareas] = useState([]);
   const [modoEdicion, setModoEdicion] = useState(false);
+  const [id, setId] = useState("");
 
   const agregarTarea = (e) => {
     e.preventDefault();
@@ -23,11 +24,30 @@ function App() {
     setTareas(arrayFiltrado);
   };
 
-  const editTask = (item) => {
+  const editar = (item) => {
     console.log(item);
     setModoEdicion(true);
     setTarea(item.nombreTarea);
+    setId(item.id);
   };
+
+  const editTask = (e) => {
+    e.preventDefault();
+    if (!tarea.trim()) {
+      console.log("Elemento Vacio");
+      return;
+    }
+
+    const arrayEditado = tareas.map((item) =>
+      item.id === id ? { id: id, nombreTarea: tarea } : item
+    );
+
+    setTareas(arrayEditado);
+    setModoEdicion(false);
+    setTarea("");
+    setId("");
+  };
+
   return (
     <div className="container mt-5">
       <h1 className="text-center">CRUD Simple</h1>
@@ -48,7 +68,7 @@ function App() {
                 </button>
                 <button
                   className="btn btn-warning btn-sm float-right"
-                  onClick={() => editTask(item)}
+                  onClick={() => editar(item)}
                 >
                   Edit
                 </button>
@@ -60,7 +80,7 @@ function App() {
           <h4 className="text-center">
             {modoEdicion ? "Edit task" : "Add Task"}
           </h4>
-          <form onSubmit={agregarTarea}>
+          <form onSubmit={modoEdicion ? editTask : agregarTarea}>
             <input
               type="text"
               className="form-control mb-2"
