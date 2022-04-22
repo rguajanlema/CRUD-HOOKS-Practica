@@ -25,15 +25,17 @@ function App() {
         <div className="col-8">
           <h4 className="text-center">List Task</h4>
           <ul className="list-group">
-            <li className="list-group-item">
-              <span className="lead">Name of the Task</span>
-              <button className="btn btn-danger btn-sm float-right mx-2">
-                Delete
-              </button>
-              <button className="btn btn-warning btn-sm float-right">
-                Edit
-              </button>
-            </li>
+            {tareas.map((item) => (
+              <li className="list-group-item" key={item.id}>
+                <span className="lead">{item.nombreTarea}</span>
+                <button className="btn btn-danger btn-sm float-right mx-2">
+                  Delete
+                </button>
+                <button className="btn btn-warning btn-sm float-right">
+                  Edit
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="col-4">
