@@ -4,6 +4,7 @@ import shortid from "shortid";
 function App() {
   const [tarea, setTarea] = useState("");
   const [tareas, setTareas] = useState([]);
+  const [modoEdicion, setModoEdicion] = useState(false);
 
   const agregarTarea = (e) => {
     e.preventDefault();
@@ -22,8 +23,10 @@ function App() {
     setTareas(arrayFiltrado);
   };
 
-  const editTask = () => {
-    console.log("Edita");
+  const editTask = (item) => {
+    console.log(item);
+    setModoEdicion(true);
+    setTarea(item.nombreTarea);
   };
   return (
     <div className="container mt-5">
@@ -45,7 +48,7 @@ function App() {
                 </button>
                 <button
                   className="btn btn-warning btn-sm float-right"
-                  onClick={() => editTask()}
+                  onClick={() => editTask(item)}
                 >
                   Edit
                 </button>
@@ -54,7 +57,9 @@ function App() {
           </ul>
         </div>
         <div className="col-4">
-          <h4 className="text-center">Form</h4>
+          <h4 className="text-center">
+            {modoEdicion ? "Edit task" : "Add Task"}
+          </h4>
           <form onSubmit={agregarTarea}>
             <input
               type="text"
@@ -63,9 +68,16 @@ function App() {
               onChange={(e) => setTarea(e.target.value)}
               value={tarea}
             />
-            <button className="btn btn-dark btn-block" type="submit">
-              Add
-            </button>
+
+            {modoEdicion ? (
+              <button className="btn btn-warning btn-block" type="submit">
+                Edit
+              </button>
+            ) : (
+              <button className="btn btn-dark btn-block" type="submit">
+                Add
+              </button>
+            )}
           </form>
         </div>
       </div>
